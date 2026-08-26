@@ -12,17 +12,10 @@ def get_sheet():
     return client.open_by_key(os.environ["SHEET_ID"])
 
 def append_daily_log_rows(rows):
-    """rows: list of [date, food, quantity, calories, protein, fat]"""
+    """rows: list of [date, food_item, calories, protein, fat]. food_item
+    should already include quantity, e.g. "1 banana" or "100g banana"."""
     ws = get_sheet().worksheet("Daily Log")
     ws.append_rows(rows, value_input_option="USER_ENTERED")
-
-def get_common_foods():
-    ws = get_sheet().worksheet("Common Foods")
-    return ws.get_all_records()
-
-def append_common_food(row):
-    ws = get_sheet().worksheet("Common Foods")
-    ws.append_row(row, value_input_option="USER_ENTERED")
 
 def upsert_daily_summary(date, totals):
     """totals: dict with calories/protein/fat. Updates the row for `date` if
